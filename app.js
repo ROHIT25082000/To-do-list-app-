@@ -90,6 +90,17 @@ app.post("/delete" ,function(req , res){
 });
 
 
+app.get("/:listName", function(req , res){
+    const myListName = req.params.listName;
+
+
+
+
+
+});
+
+
+
 app.listen(process.env.PORT || 3000 , function(req , res){
     console.log("server started at port 3000");
 });
