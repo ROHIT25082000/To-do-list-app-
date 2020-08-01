@@ -52,7 +52,7 @@ app.get("/" ,function(req, res){
                     console.log(err);
                 }
                 else{
-                    console.log("The values are inserted !");
+                    console.log("The values are inserted into the MongoDB!");
                 }
             });
         }
@@ -63,8 +63,12 @@ app.get("/" ,function(req, res){
 });
 
 app.post("/", function(req , res){
-    var myitem = req.body.itemadded;
-    item.push(myitem);
+    const myitem = req.body.itemadded;
+    const newItem = new Work({
+        name : myitem
+    });
+
+    newItem.save();
 
     res.redirect("/");
 });
