@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">   
+    <title>To do</title>
+</head>
+<body>
+    <div class="box" id="heading">
+        <h1><%= date %></h1>
+    </div>
+    <div class="box">
+        <% for(var i = 0; i < item.length ; i++){ %>
+            <div class="item">
+                <input type="checkbox">
+                <p><%= item[i] %> </p>
+            </div> 
+        <% } %>
+        <form action="/" method="POST">
+            <input type="text" name="itemadded" placeholder="Enter text" autofocus autocomplete="off">
+            <button type="submit">+</button>
+        </form>   
+    </div>
+    <div style="padding-top: 10%;">
+    <p style="text-align: center; text-transform: capitalize; font-size: small;">🇮🇳 Made in India with love &nbsp; भारत में प्यार के साथ बनाया गया 🇮🇳</p>
+    </div>  
+</body>🇮
+
+</html>
