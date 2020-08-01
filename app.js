@@ -7,27 +7,27 @@ const mongoose = require("mongoose");
 
 mongoose.connect("mongodb://localhost:27017/todolistDB" , {useNewUrlParser:true, useUnifiedTopology: true});
 
-const workSchema = mongoose.Schema({
+const workSchema = mongoose.Schema({    // list item schema 
     name : {
         type : String
     }
 });
 
-const Work = mongoose.model("work",workSchema);
+const Work = mongoose.model("work",workSchema); // list item work
 
-const work1 = new Work({
+const work1 = new Work({                // welcome messages 
     name : "Welcome to To do"
 });
 
-const work2 = new Work({
+const work2 = new Work({            // welcome messages
     name : "hit + to add an item"
 });
 
-const work3 = new Work({
+const work3 = new Work({            // welcome messages
     name : "<-- to delete an item"
 });
 
-const ListSchema = mongoose.Schema({
+const ListSchema = mongoose.Schema({ // List Schema 
     name : String , 
     items : [workSchema]
 });
@@ -43,14 +43,7 @@ app.set("view engine","ejs");
 app.use(express.static(__dirname+"/public"))
 
 app.get("/" ,function(req, res){
-    var option = {
-        weekday : "long",
-        day : "numeric",
-        month : "long",
-        year : "numeric",
-    }
-    var dateObj = new Date();
-    var date = dateObj.toLocaleDateString("en-US",option);
+    var date = getDateAndDay();
     Work.find({} ,function(err, arrayOfItems){
         if(arrayOfItems.length === 0){
 
@@ -70,15 +63,57 @@ app.get("/" ,function(req, res){
     });
 });
 
+app.get("/:listname",function(req, res){
+    const listName = req.params.listname;
+    const condition = {
+        name : listName
+    }
+    List.findOne(condition,function(err , foundList){
+        if(!err){
+            if(!foundList){
+                const newList = new List({
+                    name : listName,
+                    items : defaultList
+                });
+                newList.save();
+                res.redirect("/"+listName);
+            }
+            else{
+                res.render("index",{item : foundList.items , date : foundList.name});
+            }
+        }
+    });
+
+});
+
 app.post("/", function(req , res){
     const myitem = req.body.itemadded;
+    const listName = req.body.submit_button;
+
+    console.log(listName);
+
     const newItem = new Work({
         name : myitem
     });
-
-    newItem.save();
-
-    res.redirect("/");
+    
+    const date = getDateAndDay();
+    
+    if(date === listName){
+        newItem.save();
+        res.redirect("/");
+    }
+    else{
+        List.findOne({name : listName},function(err, foundList){
+            if(err){
+                console.log(err);
+            }
+            else{
+                foundList.items.push(newItem);
+                foundList.save();
+                res.redirect("/"+listName);
+            }
+        });
+    }
 });
 
 app.post("/delete" ,function(req , res){
@@ -97,31 +132,21 @@ app.post("/delete" ,function(req , res){
 });
 
 
-app.get("/:listName", function(req , res){
-    const myListName = req.params.listName;
-    List.findOne({name : myListName},function(err ,founditem){
-        if(err){
-            console.log(err);
-        }
-        else {
-            if(!founditem){
-                const newList = new List({
-                    name : myListName,
-                    items : defaultList
-                });
-                newList.save();
-                res.render("index", {date : founditem.name, item : founditem.items});
-                res.redirect("/"+myListName);
-            }
-            else{
-                res.redirect("/"+myListName);
-            }
-        }
-    });
-});
 
-app.listen(process.env.PORT || 3000 , function(req , res){
-    console.log("server started at port 3000");
+
+app.listen(process.env.PORT || 5000 , function(req , res){
+    console.log("server started at port 5000");
 });
 
 // sudo kill -9 `sudo lsof -t -i:3000
+
+function getDateAndDay(){
+    const options = {
+        weekday : "long",
+        day : "numeric",
+        month : "long",
+        year : "numeric",
+    }
+    const dateObj = new Date();
+    return dateObj.toLocaleDateString("en-US", options);
+}
