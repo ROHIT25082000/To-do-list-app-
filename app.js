@@ -74,12 +74,20 @@ app.post("/", function(req , res){
 });
 
 app.post("/delete" ,function(req , res){
-    console.log(req.body.checkbox);
+    console.log(req.body.mycheckbox);
+    var condition = {
+        _id : req.body.mycheckbox
+    }
+    Work.deleteOne(condition,function(err){
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log("Task completed deleted.");
+        }
+    });
+    res.redirect("/");
 });
-
-
-
-
 
 
 app.listen(process.env.PORT || 3000 , function(req , res){

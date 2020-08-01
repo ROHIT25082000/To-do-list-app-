@@ -13,12 +13,12 @@
     </div>
     <div class="box">
         <% for(var i = 0; i < item.length ; i++){ %>
+        <form  action="/delete" method="POST">
             <div class="item">
-                <form  action="/delete" method="POST">
-                    <input type="checkbox" name = "checkbox" value="<%= item._id%>" onchange="this.form.submit()"> 
+                    <input type="checkbox" name ="mycheckbox" value="<%= item[i]._id%>" onchange="this.form.submit()"> 
                     <p><%= item[i].name %> </p>
-                </form>
             </div> 
+        </form>
         <% } %>
         <form action="/" method="POST">
             <input type="text" name="itemadded" placeholder="Enter text" autofocus autocomplete="off">
