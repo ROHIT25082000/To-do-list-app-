@@ -73,6 +73,15 @@ app.post("/", function(req , res){
     res.redirect("/");
 });
 
+app.post("/delete" ,function(req , res){
+    console.log(req.body.checkbox);
+});
+
+
+
+
+
+
 app.listen(process.env.PORT || 3000 , function(req , res){
     console.log("server started at port 3000");
 });
