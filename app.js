@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 const _ = require("lodash");
 
-mongoose.connect("mongodb://localhost:27017/todolistDB" , {useNewUrlParser:true, useUnifiedTopology: true});
+mongoose.connect("mongodb+srv://rohit-user:pes1201800152@cluster0.9zppl.mongodb.net/todolistDB" , {useNewUrlParser:true, useUnifiedTopology: true});
 
 const workSchema = mongoose.Schema({    // list item schema 
     name : {
