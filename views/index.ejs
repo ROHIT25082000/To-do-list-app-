@@ -17,6 +17,7 @@
             <div class="item">
                     <input type="checkbox" name ="mycheckbox" value="<%= item[i]._id%>" onchange="this.form.submit()"> 
                     <p><%= item[i].name %> </p>
+                    <input type="hidden" name ="myhiddenInput" value="<%= date %>">
             </div> 
         </form>
         <% } %>

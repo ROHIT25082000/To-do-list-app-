@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 
 const mongoose = require("mongoose");
 
+const _ = require("lodash");
+
 mongoose.connect("mongodb://localhost:27017/todolistDB" , {useNewUrlParser:true, useUnifiedTopology: true});
 
 const workSchema = mongoose.Schema({    // list item schema 
@@ -64,7 +66,7 @@ app.get("/" ,function(req, res){
 });
 
 app.get("/:listname",function(req, res){
-    const listName = req.params.listname;
+    const listName = _.capitalize(req.params.listname);
     const condition = {
         name : listName
     }
@@ -117,18 +119,32 @@ app.post("/", function(req , res){
 });
 
 app.post("/delete" ,function(req , res){
-    var condition = {
-        _id : req.body.mycheckbox
+
+    const listName = _.capitalize(req.body.myhiddenInput);
+    const itemtoDelete = req.body.mycheckbox;
+    const day = getDateAndDay();
+
+    if(day === listName){
+        Work.deleteOne({_id : req.body.mycheckbox},function(err){
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log(req.body.mycheckbox+" deleted.");
+            }
+        });
+        res.redirect("/");
     }
-    Work.deleteOne(condition,function(err){
-        if(err){
-            console.log(err);
-        }
-        else{
-            console.log(req.body.mycheckbox+" deleted.");
-        }
-    });
-    res.redirect("/");
+    else{
+        List.findOneAndUpdate({name : listName},{$pull : {items : {_id : itemtoDelete}}},function(err, foundList){
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.redirect("/"+listName);
+            }
+        });
+    }
 });
 
 
