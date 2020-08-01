@@ -120,7 +120,7 @@ app.post("/", function(req , res){
 
 app.post("/delete" ,function(req , res){
 
-    const listName = _.capitalize(req.body.myhiddenInput);
+    const listName = req.body.myhiddenInput;
     const itemtoDelete = req.body.mycheckbox;
     const day = getDateAndDay();
 
