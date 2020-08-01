@@ -150,8 +150,8 @@ app.post("/delete" ,function(req , res){
 
 
 
-app.listen(process.env.PORT || 5000 , function(req , res){
-    console.log("server started at port 5000");
+app.listen(process.env.PORT || 4000 , function(req , res){
+    console.log("server started at port 4000");
 });
 
 // sudo kill -9 `sudo lsof -t -i:3000
