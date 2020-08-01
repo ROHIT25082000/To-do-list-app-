@@ -52,9 +52,10 @@ app.get("/" ,function(req, res){
                     console.log(err);
                 }
                 else{
-                    console.log("The values are inserted into the MongoDB!");
+                    console.log("The welcome message are inserted into the MongoDB!");
                 }
             });
+            res.redirect("/");
         }
         else {
             res.render("index", {item : arrayOfItems , date : date});
@@ -74,7 +75,6 @@ app.post("/", function(req , res){
 });
 
 app.post("/delete" ,function(req , res){
-    console.log(req.body.mycheckbox);
     var condition = {
         _id : req.body.mycheckbox
     }
@@ -83,7 +83,7 @@ app.post("/delete" ,function(req , res){
             console.log(err);
         }
         else{
-            console.log("Task completed deleted.");
+            console.log(req.body.mycheckbox+" deleted.");
         }
     });
     res.redirect("/");
