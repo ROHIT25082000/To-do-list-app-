@@ -27,6 +27,13 @@ const work3 = new Work({
     name : "<-- to delete an item"
 });
 
+const ListSchema = mongoose.Schema({
+    name : String , 
+    items : [workSchema]
+});
+
+const List = mongoose.model("List",ListSchema);
+
 var defaultList = [work1, work2, work3];
 
 app.use(bodyParser.urlencoded({extended : true}));
@@ -92,14 +99,26 @@ app.post("/delete" ,function(req , res){
 
 app.get("/:listName", function(req , res){
     const myListName = req.params.listName;
-
-
-
-
-
+    List.findOne({name : myListName},function(err ,founditem){
+        if(err){
+            console.log(err);
+        }
+        else {
+            if(!founditem){
+                const newList = new List({
+                    name : myListName,
+                    items : defaultList
+                });
+                newList.save();
+                res.render("index", {date : founditem.name, item : founditem.items});
+                res.redirect("/"+myListName);
+            }
+            else{
+                res.redirect("/"+myListName);
+            }
+        }
+    });
 });
-
-
 
 app.listen(process.env.PORT || 3000 , function(req , res){
     console.log("server started at port 3000");
